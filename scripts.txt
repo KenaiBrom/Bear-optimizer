@@ -1,0 +1,151 @@
+// ========================================
+// BEAR OPTIMIZER PRO - SCRIPTS DE OTIMIZAÇÃO
+// ========================================
+
+const SCRIPTS_OTIMIZACAO = {
+    // ===== NÍVEL 0 - TODOS OS PLANOS =====
+    clearTemp: {
+        id: 'clearTemp',
+        nome: 'Limpar Arquivos Temporários',
+        categoria: 'limpeza',
+        descricao: 'Remove arquivos temporários do Windows para liberar espaço',
+        nivel: 0,
+        codigo: `del /s /f /q c:\\windows\\temp\\*.*
+rd /s /q c:\\windows\\temp
+md c:\\windows\\temp
+del /s /f /q C:\\WINDOWS\\Prefetch
+del /s /f /q %temp%\\*.*
+rd /s /q %temp%
+md %temp%
+cls`
+    },
+    
+    fpsBoost: {
+        id: 'fpsBoost',
+        nome: 'FPS Cleaner',
+        categoria: 'performance',
+        descricao: 'Limpeza rápida para aumentar FPS em jogos',
+        nivel: 0,
+        codigo: `del /s /f /q c:\\windows\\temp\\*.*
+rd /s /q c:\\windows\\temp
+md c:\\windows\\temp
+del /s /f /q C:\\WINDOWS\\Prefetch
+del /s /f /q %temp%\\*.*
+rd /s /q %temp%
+md %temp%
+cls`
+    },
+    
+    // ===== NÍVEL 40 - PLANO START+ =====
+    fixWindows: {
+        id: 'fixWindows',
+        nome: 'Reparar Windows',
+        categoria: 'sistema',
+        descricao: 'Verifica e repara arquivos corrompidos do sistema',
+        nivel: 40,
+        codigo: `sfc /scannow
+Dism /Online /Cleanup-Image /RestoreHealth`
+    },
+    
+    optimizeMemory: {
+        id: 'optimizeMemory',
+        nome: 'Otimizar Memória RAM',
+        categoria: 'performance',
+        descricao: 'Otimiza cache e gestão de memória do Windows',
+        nivel: 40,
+        codigo: `reg add "hklm\\system\\currentcontrolset\\control\\session manager\\memory management" /v "clearpagefileatshutdown" /t reg_dword /d "0" /f
+reg add "hklm\\system\\currentcontrolset\\control\\session manager\\memory management" /v "disablepagingexecutive" /t reg_dword /d "1" /f
+reg add "hklm\\system\\currentcontrolset\\control\\session manager\\memory management" /v "largesystemcache" /t reg_dword /d "00000000" /f`
+    },
+    
+    // ===== NÍVEL 60 - PLANO GAMER+ =====
+    disableWindowsUpdate: {
+        id: 'disableWindowsUpdate',
+        nome: 'Desativar Windows Update',
+        categoria: 'sistema',
+        descricao: 'Desativa atualizações automáticas do Windows',
+        nivel: 60,
+        codigo: `net stop wuauserv
+net stop UsoSvc
+reg add "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate" /v "DoNotConnectToWindowsUpdateInternetLocations" /t REG_DWORD /d "1" /f
+reg add "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate" /v "SetDisableUXWUAccess" /t REG_DWORD /d "1" /f
+net start wuauserv`
+    },
+    
+    cleanEmulator: {
+        id: 'cleanEmulator',
+        nome: 'Limpeza para Emulador',
+        categoria: 'limpeza',
+        descricao: 'Otimiza sistema para emuladores (BlueStacks, etc)',
+        nivel: 60,
+        codigo: `del /s /f /q c:\\windows\\temp\\*.*
+rd /s /q c:\\windows\\temp
+md c:\\windows\\temp
+del /s /f /q C:\\WINDOWS\\Prefetch
+del /s /f /q c:\\ProgramData\\BlueStacks\\Logs
+del /s /f /q c:\\ProgramData\\BlueStacks\\Engine\\Android\\Logs
+cls`
+    },
+    
+    registryOptimize: {
+        id: 'registryOptimize',
+        nome: 'Otimizar Registro',
+        categoria: 'performance',
+        descricao: 'Otimiza registro do Windows para melhor performance',
+        nivel: 60,
+        codigo: `reg add "hklm\\system\\currentcontrolset\\control\\filesystem" /v "contigfileallocsize" /t reg_dword /d "1536" /f
+reg add "hklm\\system\\currentcontrolset\\control\\filesystem" /v "disabledeletenotification" /t reg_dword /d "0" /f
+reg add "hklm\\system\\currentcontrolset\\control\\filesystem" /v "ntfsdisable8dot3namecreation" /t reg_dword /d "1" /f
+reg add "hklm\\system\\currentcontrolset\\control\\filesystem" /v "ntfsdisableencryption" /t reg_dword /d "1" /f`
+    },
+    
+    // ===== NÍVEL 100 - PLANO PRO GAMER =====
+    deepClean: {
+        id: 'deepClean',
+        nome: 'Limpeza Profunda',
+        categoria: 'limpeza',
+        descricao: 'Limpeza completa do sistema incluindo logs de eventos',
+        nivel: 100,
+        codigo: `del /s /f /q "%windows%\\temp\\*.*"
+del /s /f /q "%windows%\\Prefetch\\*.*"
+del /s /f /q "%windows%\\system32\\dllcache\\*.*"
+del /s /f /q "%temp%\\*.*"
+rd /s /q %temp%
+md %temp%
+FOR /F "tokens=*" %%G in ('wevtutil.exe el') DO (wevtutil.exe cl "%%G")
+cls`
+    },
+    
+    advancedMemory: {
+        id: 'advancedMemory',
+        nome: 'Otimização Avançada de Memória',
+        categoria: 'performance',
+        descricao: 'Configurações avançadas de cache L2/L3 e gestão de memória',
+        nivel: 100,
+        codigo: `for /f %%a in ('wmic cpu get L2CacheSize ^| findstr /r "[0-9][0-9]"') do set /a l2c=%%a
+for /f %%a in ('wmic cpu get L3CacheSize ^| findstr /r "[0-9][0-9]"') do set /a l3c=%%a
+reg add "hklm\\system\\controlset001\\control\\session manager\\memory management" /v "secondleveldatacache" /t reg_dword /d "%l2c%" /f
+reg add "hklm\\system\\controlset001\\control\\session manager\\memory management" /v "thirdleveldatacache" /t reg_dword /d "%l3c%" /f
+reg add "hklm\\system\\currentcontrolset\\control\\session manager\\memory management" /v "iopagelocklimit" /t reg_dword /d "16710656" /f`
+    }
+};
+
+// Função para copiar script para clipboard
+function copiarScript(codigo) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(codigo);
+        return true;
+    }
+    return false;
+}
+
+// Função para download do script
+function baixarScript(script) {
+    const blob = new Blob([script.codigo], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${script.id}.bat`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
